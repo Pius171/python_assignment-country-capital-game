@@ -1,4 +1,8 @@
 import random
+import sys
+score =0  # variabele to hold user score
+
+#countries list was gotten from https://gist.github.com/pamelafox/986163
 countries = [
 {'timezones': ['Europe/Andorra'], 'code': 'AD', 'continent': 'Europe', 'name': 'Andorra', 'capital': 'Andorra la Vella'},
 {'timezones': ['Asia/Kabul'], 'code': 'AF', 'continent': 'Asia', 'name': 'Afghanistan', 'capital': 'Kabul'},
@@ -196,16 +200,72 @@ countries = [
 ]
 
 def main():
+    global score
+    score=0
     while True:
-        name=input("Welcome to the continent game\nPlease Enter your name: ").strip()
-        for letter in name:
-            if not letter.isalpha() and  not letter.isspace():
-                print("!Invalid input\nPlease enter your name correctly\n")
-                #continue
-        break
-    return
+        try:
+            name=input("Welcome to the continent game\nPlease Enter your name: ").strip()
+            if not name:
+                raise Exception("It seems you forgot to type in your name, Please do")
+            for letter in name:
+                if not letter.isalpha() and  not letter.isspace():
+                    raise Exception("!Invalid input\nPlease enter your name correctly\n")
+            continent=input("Hi " + name + " which continent do you want to be quizzed on\n1. Africa \t         2. Europe\n3. North America \t 4. Asia\n5. Oceania \t         6.South America\n")
+            
+            #ceate a dictionary for handling inputs
+            options={'1':'Africa','2':'Europe','3':'North America','4':'Asia','5':'Oceania','6':'South America'}
+            generate_question(options[continent])    
+            
+        
+        except Exception as e:
+            print(e)
+            print("Invalid input, restarting....")
+            continue
+        
+def generate_question(continent):
+    score=0
+    counter=0
+    while True:
+        counter+=1
+        country_list=[]
+        
+        # generate a list with only countries
+        # from the chosen continent 
+        for country in countries:
+            if country['continent']==continent:
+                country_list.append(country)
+                
+        random.shuffle(country_list)
+        x=len(country_list)  
+        answer_index =random.randint(0,x-1)      
+        print("What is the capital of "+country_list[answer_index]['name']+"\n")
+        score+=generate_options_and_get_answer(country_list[answer_index]['capital'],continent) # get score
+        
+        if counter ==x:
+            print("Game has ended, your score is "+str(score))
+            
+            while True:
+                try:
+                  choice =int(input("Do you want to play again\nEnter 1 if Yes or 2 if No: ").strip())
+                  
+                  if choice in [1,2]:# check if the user chose one or two
+                      if choice == 1:
+                          break
+                      else:
+                          sys.exit(0)
+                          
+                  else:
+                      raise Exception("Invalid input, pls enter either 1 or 2")
+                  
+                except Exception as e:
+                    if e != SystemError: # ignore any system error
+                        print(e)
+                        continue
+                  
+            break
     
-def generate_options(answer,continent):
+    
+def generate_options_and_get_answer(answer,continent):
     options = []
     
     # shuffle the countries list so
@@ -223,7 +283,42 @@ def generate_options(answer,continent):
         
     options.append(answer)
     random.shuffle(options) #shuffle the options
-    return options
+    
+    # format options output to look better
+    counter = 0
+    for option in options:
+        counter+=1
+        print("{} {}".format(counter,option))
+        
+    
+    # check the answer
+    while True:
+        try:
+            ans=int(input(""))
+            if ans not in [1,2,3,4]: # check if the user chose any of the availabe options
+                print("Invalid input\nPlease choose a number from 1-4")
+                continue
+        except Exception as e:
+            print(e)
+            if ValueError:
+                print("It seems you typed something wrong, Pls try again")
+                
+            continue
+        
+            
+        
+        break
+        
+
+    if options[ans-1] == answer:
+        print("correct")
+        return 5
+    else:
+        print("wrong")
+        print("The correct answer is '{}'".format(answer))
+        return 0
+        
+        
             
 
             
@@ -232,5 +327,6 @@ def generate_options(answer,continent):
 
 if __name__ == 'main':
     main()
-                    
-print(generate_options('Abuja','Africa'))
+   
+main()                 
+#print(generate_options('Abuja','Africa'))
