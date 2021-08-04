@@ -318,15 +318,5 @@ def generate_options_and_get_answer(answer,continent):
         print("The correct answer is '{}'".format(answer))
         return 0
         
-        
-            
-
-            
-
-    
-
-if __name__ == 'main':
-    main()
    
 main()                 
-#print(generate_options('Abuja','Africa'))
