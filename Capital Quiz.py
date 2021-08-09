@@ -209,10 +209,12 @@ def main():
                 raise Exception("It seems you forgot to type in your name, Please do")
             for letter in name:
                 if not letter.isalpha() and  not letter.isspace():
+                    #explain why the " not letter.isspace()"
                     raise Exception("!Invalid input\nPlease enter your name correctly\n")
             continent=input("Hi " + name + " which continent do you want to be quizzed on\n1. Africa \t         2. Europe\n3. North America \t 4. Asia\n5. Oceania \t         6.South America\n")
             
             #ceate a dictionary for handling inputs
+            # There are seven continents but Austrailia doesn't have any country in it, so it is exempted
             options={'1':'Africa','2':'Europe','3':'North America','4':'Asia','5':'Oceania','6':'South America'}
             generate_question(options[continent])    
             
@@ -231,38 +233,42 @@ def generate_question(continent):
         
         # generate a list with only countries
         # from the chosen continent 
+        
         for country in countries:
+            # Iterate over the values of the list 
             if country['continent']==continent:
                 country_list.append(country)
                 
         random.shuffle(country_list)
-        x=len(country_list)  
-        answer_index =random.randint(0,x-1)      
-        print("What is the capital of "+country_list[answer_index]['name']+"\n")
-        score+=generate_options_and_get_answer(country_list[answer_index]['capital'],continent) # get score
+        # x=len(country_list)  
+        # answer_index =random.randint(0,x-1)      
+        # print("What is the capital of "+country_list[answer_index]['name']+"\n")
         
-        if counter ==x:
-            print("Game has ended, your score is "+str(score))
+        for _country in country_list:
+            print("What is the capital of "+_country['name']+"\n")
+            score+=generate_options_and_get_answer(_country['capital'],continent) # get score
             
-            while True:
-                try:
-                  choice =int(input("Do you want to play again\nEnter 1 if Yes or 2 if No: ").strip())
-                  
-                  if choice in [1,2]:# check if the user chose one or two
-                      if choice == 1:
-                          break
-                      else:
-                          sys.exit(0)
-                          
+        print("Game has ended, your score is "+str(score))
+            
+        while True:
+            try:
+              choice =int(input("Do you want to play again\nEnter 1 if Yes or 2 if No: ").strip())
+              
+              if choice in [1,2]:# check if the user chose one or two
+                  if choice == 1:
+                      break
                   else:
-                      raise Exception("Invalid input, pls enter either 1 or 2")
-                  
-                except Exception as e:
-                    if e != SystemError: # ignore any system error
-                        print(e)
-                        continue
-                  
-            break
+                      sys.exit(0)
+                      
+              else:
+                  raise Exception("Invalid input, pls enter either 1 or 2")
+              
+            except Exception as e:
+                if e != SystemError: # ignore any system error
+                    print(e)
+                    continue
+              
+        #break
     
     
 def generate_options_and_get_answer(answer,continent):
@@ -317,6 +323,7 @@ def generate_options_and_get_answer(answer,continent):
         print("wrong")
         print("The correct answer is '{}'".format(answer))
         return 0
+        
         
    
 main()                 
