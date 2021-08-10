@@ -203,6 +203,9 @@ def main():
     global score
     score=0
     while True:
+        
+        # learn more about try and except, link in the description below
+        # https://youtu.be/NIWwJbo-9_8
         try:
             name=input("Welcome to the continent game\nPlease Enter your name: ").strip()
             if not name:
@@ -211,10 +214,15 @@ def main():
                 if not letter.isalpha() and  not letter.isspace():
                     #explain why the " not letter.isspace()"
                     raise Exception("!Invalid input\nPlease enter your name correctly\n")
-            continent=input("Hi " + name + " which continent do you want to be quizzed on\n1. Africa \t         2. Europe\n3. North America \t 4. Asia\n5. Oceania \t         6.South America\n")
+                
+                #why the spaces
+            continent=input("Hi " + name + " which continent do you want to be quizzed on\n1. Africa \t         2. Europe\n3. North America \t 4. Asia\n5. Oceania \t         6.South America\nChose from from options 1-6: ")
             
             #ceate a dictionary for handling inputs
             # There are seven continents but Austrailia doesn't have any country in it, so it is exempted
+            
+            # dictionary tutorial
+            # https://youtu.be/daefaLgNkw0
             options={'1':'Africa','2':'Europe','3':'North America','4':'Asia','5':'Oceania','6':'South America'}
             generate_question(options[continent])    
             
@@ -225,10 +233,11 @@ def main():
             continue
         
 def generate_question(continent):
+    # python tutrorial on functions
+    # https://youtu.be/u-OmVr_fT4s
+    
     score=0
-    counter=0
     while True:
-        counter+=1
         country_list=[]
         
         # generate a list with only countries
@@ -237,14 +246,14 @@ def generate_question(continent):
         for country in countries:
             # Iterate over the values of the list 
             if country['continent']==continent:
-                country_list.append(country)
-                
+                country_list.append(country) # append all dictionaries in countries list that are from a particular
+                                             # continent to a country_list
         random.shuffle(country_list)
-        # x=len(country_list)  
-        # answer_index =random.randint(0,x-1)      
-        # print("What is the capital of "+country_list[answer_index]['name']+"\n")
         
         for _country in country_list:
+            # This loops through each country in our country list
+            # which contains only countries from chosen continent 
+            
             print("What is the capital of "+_country['name']+"\n")
             score+=generate_options_and_get_answer(_country['capital'],continent) # get score
             
@@ -291,7 +300,9 @@ def generate_options_and_get_answer(answer,continent):
     random.shuffle(options) #shuffle the options
     
     # format options output to look better
-    counter = 0
+    
+    counter = 0 # just to add numbers beside the options
+    
     for option in options:
         counter+=1
         print("{} {}".format(counter,option))
@@ -318,11 +329,11 @@ def generate_options_and_get_answer(answer,continent):
 
     if options[ans-1] == answer:
         print("correct")
-        return 5
+        return 5 # add 5 points to score
     else:
         print("wrong")
         print("The correct answer is '{}'".format(answer))
-        return 0
+        return 0 # add 0 point
         
         
    
